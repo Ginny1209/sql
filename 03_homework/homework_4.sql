@@ -69,7 +69,7 @@ SELECT
 FROM 
     customer_purchases;
 
-
+/* The rest of qestions*/
 /* STRING*/
 
 SELECT 
