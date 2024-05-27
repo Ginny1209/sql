@@ -28,6 +28,7 @@ ORDER BY
     c.customer_last_name, c.customer_first_name;
 
 
+
 --Temp Table
 /* 1. Insert the original vendor table into a temp.new_vendor and then add a 10th vendor: 
 Thomass Superfood Store, a Fresh Focused store, owned by Thomas Rosenthal
@@ -38,6 +39,7 @@ When inserting the new vendor, you need to appropriately align the columns to be
 
 CREATE TABLE temp.new_vendor AS
 SELECT * FROM vendor;
+
 -> To insert the new row use VALUES, specifying the value you want for each column:
 VALUES(col1,col2,col3,col4,col5) 
 */
@@ -45,12 +47,12 @@ INSERT INTO temp.new_vendor (vendor_id, vendor_name, vendor_owner_first_name, ve
 VALUES (10, 'Thomass Superfood Store', 'Thomas', 'Rosenthal');
 
 
-
 -- Date
 /*1. Get the customer_id, month, and year (in separate columns) of every purchase in the customer_purchases table.
 
 HINT: you might need to search for strfrtime modifers sqlite on the web to know what the modifers for month 
 and year are! */
+
 SELECT 
     customer_id, 
     strftime('%m', market_date) AS month, 
@@ -62,6 +64,7 @@ Remember that money spent is quantity*cost_to_customer_per_qty.
 
 HINTS: you will need to AGGREGATE, GROUP BY, and filter...
 but remember, STRFTIME returns a STRING for your WHERE statement!! */
+
 SELECT 
     customer_id, 
     SUM(quantity * cost_to_customer_per_qty) AS totalspending
@@ -72,3 +75,7 @@ WHERE
     AND strftime('%m', market_date) = '04'
 GROUP BY 
     customer_id;
+
+
+/* question here, I have used "sumspending" which I used as aliss in question 2, and then i try to use it again, but showed errors, then I used "totalspending" instead. 
+does SQL will remember alias, I think they are always one time use in sql */
