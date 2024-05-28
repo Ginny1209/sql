@@ -186,13 +186,18 @@ Third, SET current_quantity = (...your select statement...), remembering that WH
 Finally, make sure you have a WHERE statement to update the right row, 
 	you'll need to use product_units.product_id to refer to the correct row within the product_units table. 
 When you have all of these components, you can run the update statement. */
-
-ALTER TABLE product_units
-ADD current_quantity INT;
 UPDATE product_units
 SET current_quantity = (
-    SELECT COALESCE(MAX(vi.quantity), 0) 
-    FROM vendor_inventory vi
-    WHERE vi.product_id = product_units.product_id
+    SELECT 
+        COALESCE(quantity, 0)
+    FROM 
+        (SELECT 
+             product_id, 
+             quantity, 
+             ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY date DESC) AS rn
+         FROM vendor_inventory) AS subquery
+    WHERE 
+        subquery.product_id = product_units.product_id
+        AND rn = 1
 );
 
